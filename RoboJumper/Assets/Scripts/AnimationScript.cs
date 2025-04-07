@@ -32,12 +32,23 @@ public class AnimationScript : MonoBehaviour
             //RunTime = 0;
         }
 
-        //if (!CharacterController.isGrounded)
-        //{
-        //    CharAnimator.SetBool("Falling", true);
-        //}
 
-        if (CharacterMovement.isDead) {
+        if (CharMovement.JumpPressed) {
+            CharAnimator.SetBool("Jumped", true);
+        } else {
+            CharAnimator.SetBool("Jumped", false);
+        }
+
+        if (!CharMovement.CurrentlyGrounded)
+        {
+            CharAnimator.SetBool("Falling", true);
+        } else
+        {
+            CharAnimator.SetBool("Falling", false);
+        }
+
+        if (CharacterMovement.isDead)
+        {
             CharAnimator.SetBool("HasDied", true);
         }
     }

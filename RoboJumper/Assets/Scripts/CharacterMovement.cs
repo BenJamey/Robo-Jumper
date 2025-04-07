@@ -34,6 +34,8 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] float JumpForce;
     //[SerializeField] LayerMask GroundLayer;
     public Vector3 Velocity;
+    public bool JumpPressed = false;
+    public bool CurrentlyGrounded = false;
 
     //Variables used for getting the bonus points
     public static float ScoreBonus;
@@ -63,11 +65,17 @@ public class CharacterMovement : MonoBehaviour
         CharacterController = GetComponent<CharacterController>();
         PlayerCamera = FindFirstObjectByType<CameraMovement>().transform;
         Time.timeScale = 1;
+        isDead = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Hitpoints < 0)
+        {
+            isDead = true;
+            CharAnim.Disable();
+        }
         ApplyGravity();
         ApplyMovement();
         jumpAction();
@@ -108,10 +116,12 @@ public class CharacterMovement : MonoBehaviour
         if(IsGrounded() && Velocity.y < 0.0f) {
             Velocity.y = -1.0f;
             //Debug.Log("Is grounded");
+            CurrentlyGrounded = true;
         }
         else {
             Velocity.y += GravityForce * GravityMultiplier * Time.deltaTime;
             //Debug.Log("Is airborn");
+            CurrentlyGrounded = false;
         }
         CharacterController.Move(Velocity * Time.deltaTime);
     }
@@ -119,11 +129,20 @@ public class CharacterMovement : MonoBehaviour
     public void jumpAction() {
         if(jump.ReadValue<float>() > 0) {
             if (IsGrounded()) {
-                Velocity.y = Mathf.Sqrt(JumpForce * -2 * GravityForce);
+                JumpPressed = true;
+                StartCoroutine(Jumped());
             }
         }
-
     }
+
+    IEnumerator Jumped()
+    {
+        yield return new WaitForSeconds(0.5f);
+        Velocity.y = Mathf.Sqrt(JumpForce * -2 * GravityForce);
+        JumpPressed = false;
+    }
+
+     
 
     private bool IsGrounded() => CharacterController.isGrounded;
 
@@ -146,10 +165,6 @@ public class CharacterMovement : MonoBehaviour
                 BonusMultiplier = 1;
                 ConsectiveActions = 0;
                 RunBonus = false;
-                if (Hitpoints < 0) {
-                    isDead = true;
-                    CharAnim.Disable();
-                }
             }
         }
     }
@@ -181,11 +196,15 @@ public class CharacterMovement : MonoBehaviour
             BonusTimer -= Time.deltaTime; //Decreases it by 1 second each frame
         }
 
-        else if (RunBonus && BonusTimer <= 0) {
+        else if (RunBonus && BonusTimer <= 0) { //Resets/adds up bonus points when the bonus timer runs out
             ScoreBonus *= BonusMultiplier;
             int TotalBonus = (int)ScoreBonus;
             Points += TotalBonus;
+            ScoreBonus = 0;
+            BonusMultiplier = 1;
+            ConsectiveActions = 0;
             RunBonus = false;
+
         }
 
 

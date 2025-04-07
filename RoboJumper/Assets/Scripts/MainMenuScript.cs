@@ -16,5 +16,6 @@ public class MainMenuScript : MonoBehaviour
     public void OpenTestLevel()
     {
         SceneManager.LoadScene("Test Level");
+
     }
 }
