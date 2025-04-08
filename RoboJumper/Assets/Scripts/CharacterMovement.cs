@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class CharacterMovement : MonoBehaviour
@@ -10,12 +11,10 @@ public class CharacterMovement : MonoBehaviour
     public static CharacterController CharacterController;
     //Base variables used for basic functions
     static int MaxHitpoints = 3;
-    public static int Hitpoints = 3;
-    public static int CoinsCollected;
-    public static int Points;
     float CurrentVelocity = 0;
     float RunTime = 0; //Used to determine when a character has started running
     public static bool isDead = false;
+    public static bool LevelComplete = false;
     [HideInInspector] public Vector3 Direction;
     //Movement variables
     InputAction move;
@@ -32,10 +31,11 @@ public class CharacterMovement : MonoBehaviour
     //Jump variables
     InputAction jump;
     [SerializeField] float JumpForce;
-    //[SerializeField] LayerMask GroundLayer;
+    [SerializeField] LayerMask GroundLayer;
     public Vector3 Velocity;
     public bool JumpPressed = false;
     public bool CurrentlyGrounded = false;
+    private bool isGrounded;
 
     //Variables used for getting the bonus points
     public static float ScoreBonus;
@@ -45,23 +45,32 @@ public class CharacterMovement : MonoBehaviour
     float BonusTimer = 0;
 
     InputAction pause; //Used to help pause the game
-    private void Awake() {
+    private void Awake()
+    {
         CharAnim = new RobotAnimations();
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         move = CharAnim.Player.Move;
         jump = CharAnim.Player.Jump;
         move.Enable();
         jump.Enable();
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         move.Disable();
         jump.Disable();
     }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.blue;
+    //    Gizmos.DrawWireSphere(transform.position, 0.15f);
+    //}
 
-    void Start() {
+    void Start()
+    {
         CharacterController = GetComponent<CharacterController>();
         PlayerCamera = FindFirstObjectByType<CameraMovement>().transform;
         Time.timeScale = 1;
@@ -71,11 +80,19 @@ public class CharacterMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Hitpoints < 0)
+        isGrounded = Physics.CheckSphere(transform.position, 0.15f, GroundLayer);
+        if (VariableStorage.Hitpoints < 0)
         {
             isDead = true;
             CharAnim.Disable();
         }
+
+        if (LevelComplete)
+        {
+            CharAnim.Disable();
+            StartCoroutine(LoadResults());
+        }
+
         ApplyGravity();
         ApplyMovement();
         jumpAction();
@@ -84,14 +101,17 @@ public class CharacterMovement : MonoBehaviour
     }
 
     //Controlling the character movements
-    private void ApplyMovement() {
+    private void ApplyMovement()
+    {
         Direction = new Vector3(move.ReadValue<Vector2>().x, 0, move.ReadValue<Vector2>().y).normalized;
         if (Direction.magnitude > 0.2)
         {
-            if (RunTime < 2) { //Once the playe have moved for a few seconds he'll start running
+            if (RunTime < 2)
+            { //Once the playe have moved for a few seconds he'll start running
                 Speed = WalkSpeed;
             }
-            else {
+            else
+            {
                 Speed = RunSpeed;
             }
 
@@ -108,27 +128,31 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             RunTime = 0;
+            //ApplyGravity();
         }
     }
 
-    private void ApplyGravity() {
-
-        if(IsGrounded() && Velocity.y < 0.0f) {
+    private void ApplyGravity()
+    {
+        if (isGrounded && Velocity.y < 0.0f)
+        {
             Velocity.y = -1.0f;
-            //Debug.Log("Is grounded");
             CurrentlyGrounded = true;
         }
-        else {
+        else
+        {
             Velocity.y += GravityForce * GravityMultiplier * Time.deltaTime;
-            //Debug.Log("Is airborn");
             CurrentlyGrounded = false;
         }
         CharacterController.Move(Velocity * Time.deltaTime);
     }
 
-    public void jumpAction() {
-        if(jump.ReadValue<float>() > 0) {
-            if (IsGrounded()) {
+    public void jumpAction()
+    {
+        if (jump.ReadValue<float>() > 0)
+        {
+            if (isGrounded)
+            {
                 JumpPressed = true;
                 StartCoroutine(Jumped());
             }
@@ -137,77 +161,111 @@ public class CharacterMovement : MonoBehaviour
 
     IEnumerator Jumped()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.25f);
         Velocity.y = Mathf.Sqrt(JumpForce * -2 * GravityForce);
         JumpPressed = false;
     }
 
-     
-
-    private bool IsGrounded() => CharacterController.isGrounded;
+    //private bool IsGrounded() => CharacterController.isGrounded;
 
 
     //Used to make the player collect coins
-    private void OnTriggerEnter(Collider other) {
+    private void OnTriggerEnter(Collider other)
+    {
 
         //When a user collects a coin
-        if(other.gameObject.tag == "Coin") {
-            CoinsCollected++;
-            Points += 10;
+        if (other.gameObject.tag == "Coin")
+        {
+            VariableStorage.CoinsCollected++;
+            VariableStorage.Points += 10;
             Destroy(other.gameObject);
             CheckMultiplier();
         }
 
-        if (other.gameObject.tag == "Hazard") {
-            Hitpoints -= 1;
-            if (RunBonus) { //Cancels score bonus upon taking damage
+        if (other.gameObject.tag == "Hazard")
+        {
+            VariableStorage.Hitpoints -= 1;
+            if (RunBonus)
+            { //Cancels score bonus upon taking damage
                 ScoreBonus = 0;
                 BonusMultiplier = 1;
                 ConsectiveActions = 0;
                 RunBonus = false;
             }
         }
+
+        if (other.gameObject.tag == "Pitt")
+        {
+            VariableStorage.Hitpoints = -5;
+            if (RunBonus)
+            { //Cancels score bonus upon taking damage
+                ScoreBonus = 0;
+                BonusMultiplier = 1;
+                ConsectiveActions = 0;
+                RunBonus = false;
+            }
+        }
+        if (other.gameObject.tag == "Finish")
+        {
+            if (RunBonus)
+            {
+                BonusTimer = 0;
+                AddBonus();
+            }
+            LevelComplete = true;
+        }
     }
 
-    public void CheckMultiplier() {
+    public void CheckMultiplier()
+    {
         BonusTimer = 5;
-        if (!RunBonus) {
+        if (!RunBonus)
+        {
             RunBonus = true;
             ScoreBonus += 10;
             ConsectiveActions += 1;
-            if (ConsectiveActions == 5) {
+            if (ConsectiveActions >= 5)
+            {
                 ConsectiveActions = 0;
                 BonusMultiplier += 0.05f;
             }
         }
-        else if (RunBonus) {
+        else if (RunBonus)
+        {
             ScoreBonus += 10;
             ConsectiveActions += 1;
-            if (ConsectiveActions == 5) {
+            if (ConsectiveActions >= 5)
+            {
                 ConsectiveActions = 0;
                 BonusMultiplier += 0.05f;
             }
         }
     }
 
+    //This is used to add bonis points when a the bonus tally timer runs out
     public void AddBonus()
     {
-        if (RunBonus && BonusTimer > 0) {
+        if (RunBonus && BonusTimer > 0)
+        {
             BonusTimer -= Time.deltaTime; //Decreases it by 1 second each frame
         }
 
-        else if (RunBonus && BonusTimer <= 0) { //Resets/adds up bonus points when the bonus timer runs out
+        else if (RunBonus && BonusTimer <= 0)
+        { //Resets/adds up bonus points when the bonus timer runs out
             ScoreBonus *= BonusMultiplier;
             int TotalBonus = (int)ScoreBonus;
-            Points += TotalBonus;
+            VariableStorage.Points += TotalBonus;
             ScoreBonus = 0;
             BonusMultiplier = 1;
             ConsectiveActions = 0;
             RunBonus = false;
 
         }
+    }
 
-
-
+    IEnumerator LoadResults()
+    {
+        yield return new WaitForSeconds(3);
+        SceneManager.LoadScene("Victory Screen");
     }
 }

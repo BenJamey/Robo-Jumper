@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Pausemanager : MonoBehaviour
 {
-    private RobotAnimations InGameCOntrols;
+    private RobotAnimations InGameControls;
     private InputAction Menucontrols;
     bool LoadDeathMenu = false;
 
@@ -16,20 +16,15 @@ public class Pausemanager : MonoBehaviour
     [SerializeField] private bool isPaused;
 
     void Awake() {
-        InGameCOntrols = new RobotAnimations();
+        InGameControls = new RobotAnimations();
     }
 
     private void OnEnable()
     {
-        Menucontrols = InGameCOntrols.Menu.Escape;
+        Menucontrols = InGameControls.Menu.Escape;
         Menucontrols.Enable();
 
         Menucontrols.performed += Pause;
-    }
-
-    void Start()
-    {
-        GameOver.SetActive(false);
     }
 
     private void OnDisable()
@@ -65,7 +60,7 @@ public class Pausemanager : MonoBehaviour
     }
 
     IEnumerator ActivateGameOverMenu() {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4);
         Time.timeScale = 0;
         GameOver.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
@@ -76,22 +71,23 @@ public class Pausemanager : MonoBehaviour
         Time.timeScale = 1;
         PauseUI.SetActive(false);
         isPaused = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void Retry()
     {
-        CharacterMovement.CoinsCollected = 0;
-        CharacterMovement.Points = 0;
-        CharacterMovement.Hitpoints = 3;
+        VariableStorage.CoinsCollected = 0;
+        VariableStorage.Points = 0;
+        VariableStorage.Hitpoints = 3;
         CharacterMovement.BonusMultiplier = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void ExitGame() {
-        CharacterMovement.CoinsCollected = 0;
-        CharacterMovement.Points = 0;
-        CharacterMovement.Hitpoints = 3;
+        VariableStorage.CoinsCollected = 0;
+        VariableStorage.Points = 0;
+        VariableStorage.Hitpoints = 3;
         CharacterMovement.BonusMultiplier = 1;
         SceneManager.LoadScene("Main Menu");
     }

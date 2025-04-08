@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 public class HUDScript : MonoBehaviour
 {
-    public RobotAnimations MenuControls;
+    //public RobotAnimations MenuControls;
     //private CharacterMovement IngameControls;
     //The user chooses to start the game
     [SerializeField] GameObject HudGo;
@@ -23,19 +23,17 @@ public class HUDScript : MonoBehaviour
     {
         HudGo.SetActive(true);
         BonusTally.SetActive(false);
-        //PauseMenuGo.SetActive(false);
-        //OptionsGo.SetActive(false);
     }
 
     // Update is called once per frame
     void Update()
     {
-        LivesText.text = CharacterMovement.Hitpoints.ToString();
-        if (CharacterMovement.Hitpoints < 0) {
+        LivesText.text = VariableStorage.Hitpoints.ToString();
+        if (VariableStorage.Hitpoints < 0) {
             LivesText.text = "0";
         }
-        CoinsText.text = CharacterMovement.CoinsCollected.ToString("000");
-        PointsText.text = CharacterMovement.Points.ToString("000000000");
+        CoinsText.text = VariableStorage.CoinsCollected.ToString("000");
+        PointsText.text = VariableStorage.Points.ToString("000000000");
 
         if (CharacterMovement.RunBonus)
         {

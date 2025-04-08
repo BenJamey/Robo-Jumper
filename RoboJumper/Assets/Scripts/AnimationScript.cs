@@ -47,9 +47,12 @@ public class AnimationScript : MonoBehaviour
             CharAnimator.SetBool("Falling", false);
         }
 
-        if (CharacterMovement.isDead)
-        {
+        if (CharacterMovement.isDead) {
             CharAnimator.SetBool("HasDied", true);
+        }
+
+        if (CharacterMovement.LevelComplete) {
+            CharAnimator.SetBool("Victory", true);
         }
     }
 }

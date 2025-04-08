@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Game Scenes/Main Menu.unity
     guid: 580722ce756d98d4f9107d3bdcdf0df3
   - enabled: 1
+    path: Assets/Game Scenes/Victory Screen.unity
+    guid: af707f9c7752eac498a7a9097c14d011
+  - enabled: 1
     path: Assets/Game Scenes/Test Level.unity
     guid: 0f1d9e482a4b1ca4ca8c985cbcfbe4ce
   m_configObjects: {}
