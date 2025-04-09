@@ -64,9 +64,9 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Pause"",
+                    ""name"": ""AddBonus"",
                     ""type"": ""Button"",
-                    ""id"": ""f54ac01e-3c44-4c30-ba4e-a50e3a0d5a7c"",
+                    ""id"": ""6654a56e-fc3e-4b5a-9c01-df543cd5286c"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -307,12 +307,12 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7ffeb6f3-f16f-4aee-98e4-5ba6a94da982"",
-                    ""path"": ""<Keyboard>/p"",
+                    ""id"": ""cb82a713-0c05-4101-afde-a1e4e6f0d3b6"",
+                    ""path"": ""<Keyboard>/o"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Pause"",
+                    ""groups"": """",
+                    ""action"": ""AddBonus"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -932,7 +932,7 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_AddBonus = m_Player.FindAction("AddBonus", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1013,7 +1013,7 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_AddBonus;
     public struct PlayerActions
     {
         private @RobotAnimations m_Wrapper;
@@ -1022,7 +1022,7 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @AddBonus => m_Wrapper.m_Player_AddBonus;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1044,9 +1044,9 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Pause.started += instance.OnPause;
-            @Pause.performed += instance.OnPause;
-            @Pause.canceled += instance.OnPause;
+            @AddBonus.started += instance.OnAddBonus;
+            @AddBonus.performed += instance.OnAddBonus;
+            @AddBonus.canceled += instance.OnAddBonus;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1063,9 +1063,9 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Pause.started -= instance.OnPause;
-            @Pause.performed -= instance.OnPause;
-            @Pause.canceled -= instance.OnPause;
+            @AddBonus.started -= instance.OnAddBonus;
+            @AddBonus.performed -= instance.OnAddBonus;
+            @AddBonus.canceled -= instance.OnAddBonus;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1298,7 +1298,7 @@ public partial class @RobotAnimations: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnPause(InputAction.CallbackContext context);
+        void OnAddBonus(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

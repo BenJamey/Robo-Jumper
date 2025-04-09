@@ -8,10 +8,12 @@ using UnityEngine.InputSystem;
 public class HUDScript : MonoBehaviour
 {
     //public RobotAnimations MenuControls;
-    //private CharacterMovement IngameControls;
+    //public static CharacterController CharacterController;
     //The user chooses to start the game
     [SerializeField] GameObject HudGo;
     [SerializeField] GameObject BonusTally;
+    //[SerializeField] GameObject PauseMenu;
+    //InputAction pause;
     //public CharacterController CharacterController;
     //Variables for the values
     [SerializeField] TextMeshProUGUI LivesText;
@@ -19,10 +21,29 @@ public class HUDScript : MonoBehaviour
     [SerializeField] TextMeshProUGUI PointsText;
     [SerializeField] TextMeshProUGUI BonusText;
     [SerializeField] TextMeshProUGUI BonusMultipliert;
+
+    //private void Awake()
+    //{
+    //    MenuControls = new RobotAnimations();
+    //}
+
+    //private void OnEnable()
+    //{
+    //    pause = MenuControls.Player.Pause;
+    //    pause.Enable();
+    //}
+
+    //private void OnDisable()
+    //{
+    //    pause.Disable();
+    //}
     void Start()
     {
+        //CharacterController = GetComponent<CharacterController>();
         HudGo.SetActive(true);
         BonusTally.SetActive(false);
+        //PauseMenu.SetActive(false);
+
     }
 
     // Update is called once per frame
@@ -45,5 +66,29 @@ public class HUDScript : MonoBehaviour
             BonusTally.SetActive(false);
         }
 
+        
+
     }
+
+    //public void PauseController()
+    //{
+    //    if (pause.ReadValue<float>() > 0) {
+    //        Debug.Log("Pause button pressed");
+    //        ActivateMenu();
+    //    }
+    //}
+
+    //void ActivateMenu() {
+    //    Time.timeScale = 0;
+    //    PauseMenu.SetActive(true);
+    //    Cursor.lockState = CursorLockMode.None;
+    //    Cursor.visible = true;
+    //}
+
+    //public void ResumeGame() {
+    //    Time.timeScale = 1;
+    //    PauseMenu.SetActive(false);
+    //    Cursor.lockState = CursorLockMode.Locked;
+    //    Cursor.visible = false;
+    //}
 }

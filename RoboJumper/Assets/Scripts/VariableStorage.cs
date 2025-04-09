@@ -11,4 +11,6 @@ public class VariableStorage : MonoBehaviour
     //VariableStorage.CoinsCollected
     public static int Points;
     //VariableStorage.Points
+    public static int CurrentLevel; //Will be used in future for loading the levels
+    //VariableStorage.CurrentLevel
 }

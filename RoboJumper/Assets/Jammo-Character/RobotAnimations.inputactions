@@ -42,9 +42,9 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Pause",
+                    "name": "AddBonus",
                     "type": "Button",
-                    "id": "f54ac01e-3c44-4c30-ba4e-a50e3a0d5a7c",
+                    "id": "6654a56e-fc3e-4b5a-9c01-df543cd5286c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -285,12 +285,12 @@
                 },
                 {
                     "name": "",
-                    "id": "7ffeb6f3-f16f-4aee-98e4-5ba6a94da982",
-                    "path": "<Keyboard>/p",
+                    "id": "cb82a713-0c05-4101-afde-a1e4e6f0d3b6",
+                    "path": "<Keyboard>/o",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Pause",
+                    "groups": "",
+                    "action": "AddBonus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

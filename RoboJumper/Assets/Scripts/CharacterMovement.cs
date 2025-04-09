@@ -16,6 +16,7 @@ public class CharacterMovement : MonoBehaviour
     public static bool isDead = false;
     public static bool LevelComplete = false;
     [HideInInspector] public Vector3 Direction;
+    InputAction add; //Used to instantly add bonus points to curent score
     //Movement variables
     InputAction move;
     [HideInInspector] public float Speed = 0;
@@ -44,7 +45,6 @@ public class CharacterMovement : MonoBehaviour
     public static bool RunBonus = false;
     float BonusTimer = 0;
 
-    InputAction pause; //Used to help pause the game
     private void Awake()
     {
         CharAnim = new RobotAnimations();
@@ -54,20 +54,18 @@ public class CharacterMovement : MonoBehaviour
     {
         move = CharAnim.Player.Move;
         jump = CharAnim.Player.Jump;
+        add = CharAnim.Player.AddBonus;
         move.Enable();
         jump.Enable();
+        add.Enable();
     }
 
     private void OnDisable()
     {
         move.Disable();
         jump.Disable();
+        add.Disable();
     }
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.blue;
-    //    Gizmos.DrawWireSphere(transform.position, 0.15f);
-    //}
 
     void Start()
     {
@@ -75,6 +73,7 @@ public class CharacterMovement : MonoBehaviour
         PlayerCamera = FindFirstObjectByType<CameraMovement>().transform;
         Time.timeScale = 1;
         isDead = false;
+        VariableStorage.CurrentLevel = SceneManager.GetActiveScene().buildIndex;
     }
 
     // Update is called once per frame
@@ -97,6 +96,7 @@ public class CharacterMovement : MonoBehaviour
         ApplyMovement();
         jumpAction();
         AddBonus();
+        InstantBonus();
 
     }
 
@@ -147,29 +147,21 @@ public class CharacterMovement : MonoBehaviour
         CharacterController.Move(Velocity * Time.deltaTime);
     }
 
-    public void jumpAction()
-    {
-        if (jump.ReadValue<float>() > 0)
-        {
-            if (isGrounded)
-            {
+    public void jumpAction() {
+        if (jump.ReadValue<float>() > 0) {
+            if (isGrounded) {
                 JumpPressed = true;
                 StartCoroutine(Jumped());
             }
         }
     }
 
-    IEnumerator Jumped()
-    {
+    IEnumerator Jumped() {
         yield return new WaitForSeconds(0.25f);
         Velocity.y = Mathf.Sqrt(JumpForce * -2 * GravityForce);
         JumpPressed = false;
     }
 
-    //private bool IsGrounded() => CharacterController.isGrounded;
-
-
-    //Used to make the player collect coins
     private void OnTriggerEnter(Collider other)
     {
 
@@ -182,11 +174,9 @@ public class CharacterMovement : MonoBehaviour
             CheckMultiplier();
         }
 
-        if (other.gameObject.tag == "Hazard")
-        {
+        if (other.gameObject.tag == "Hazard" || other.gameObject.tag == "Projectile") {
             VariableStorage.Hitpoints -= 1;
-            if (RunBonus)
-            { //Cancels score bonus upon taking damage
+            if (RunBonus) { //Cancels score bonus upon taking damage
                 ScoreBonus = 0;
                 BonusMultiplier = 1;
                 ConsectiveActions = 0;
@@ -194,21 +184,17 @@ public class CharacterMovement : MonoBehaviour
             }
         }
 
-        if (other.gameObject.tag == "Pitt")
-        {
+        if (other.gameObject.tag == "Pitt") {
             VariableStorage.Hitpoints = -5;
-            if (RunBonus)
-            { //Cancels score bonus upon taking damage
+            if (RunBonus) { //Cancels score bonus upon taking damage
                 ScoreBonus = 0;
                 BonusMultiplier = 1;
                 ConsectiveActions = 0;
                 RunBonus = false;
             }
         }
-        if (other.gameObject.tag == "Finish")
-        {
-            if (RunBonus)
-            {
+        if (other.gameObject.tag == "Finish") {
+            if (RunBonus) {
                 BonusTimer = 0;
                 AddBonus();
             }
@@ -245,13 +231,11 @@ public class CharacterMovement : MonoBehaviour
     //This is used to add bonis points when a the bonus tally timer runs out
     public void AddBonus()
     {
-        if (RunBonus && BonusTimer > 0)
-        {
+        if (RunBonus && BonusTimer > 0) {
             BonusTimer -= Time.deltaTime; //Decreases it by 1 second each frame
         }
 
-        else if (RunBonus && BonusTimer <= 0)
-        { //Resets/adds up bonus points when the bonus timer runs out
+        else if (RunBonus && BonusTimer <= 0) { //Resets/adds up bonus points when the bonus timer runs out
             ScoreBonus *= BonusMultiplier;
             int TotalBonus = (int)ScoreBonus;
             VariableStorage.Points += TotalBonus;
@@ -259,10 +243,17 @@ public class CharacterMovement : MonoBehaviour
             BonusMultiplier = 1;
             ConsectiveActions = 0;
             RunBonus = false;
-
         }
     }
 
+    public void InstantBonus() {
+        if (add.ReadValue<float>() > 0){
+            if (RunBonus && BonusTimer > 0) {
+                BonusTimer = 0;
+                AddBonus();
+            }
+        }
+    }
     IEnumerator LoadResults()
     {
         yield return new WaitForSeconds(3);

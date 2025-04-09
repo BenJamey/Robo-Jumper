@@ -445,13 +445,13 @@ CharacterController:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Height: 1.83
+  m_Height: 1.91
   m_Radius: 0.5
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.75, z: 0}
+  m_Center: {x: 0, y: 0.94, z: 0}
 --- !u!114 &8647716305693037994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,15 +494,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e8348bb35c8f03468267c82abb32e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterController: {fileID: 0}
   Direction: {x: 0, y: 0, z: 0}
   Speed: 8
   WalkSpeed: 6
   RunSpeed: 12
   CharRotationSpeed: 0.05
   GravityMultiplier: 3
-  JumpForce: 15
+  JumpForce: 10
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   Velocity: {x: 0, y: 0, z: 0}
+  JumpPressed: 0
+  CurrentlyGrounded: 0
 --- !u!114 &8304602801671301495
 MonoBehaviour:
   m_ObjectHideFlags: 0

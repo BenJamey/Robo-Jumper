@@ -42,7 +42,7 @@ public class Pausemanager : MonoBehaviour
         }
     }
 
-    public void Pause(InputAction.CallbackContext context) {
+    void Pause(InputAction.CallbackContext context) {
         isPaused = !isPaused;
 
         if (isPaused) {
@@ -59,20 +59,22 @@ public class Pausemanager : MonoBehaviour
         Cursor.visible = true;
     }
 
+    public void DeactivateMenu()
+    {
+        Time.timeScale = 1;
+        PauseUI.SetActive(false);
+        isPaused = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        isPaused = false;
+    }
+
     IEnumerator ActivateGameOverMenu() {
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         Time.timeScale = 0;
         GameOver.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-    }
-
-    public void DeactivateMenu() { 
-        Time.timeScale = 1;
-        PauseUI.SetActive(false);
-        isPaused = false;
-        //Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     public void Retry()
