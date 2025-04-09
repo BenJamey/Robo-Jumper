@@ -405,10 +405,12 @@
 "Assets/Scripts/CameraMovement.cs"
 "Assets/Scripts/CharacterMovement.cs"
 "Assets/Scripts/CoinScript.cs"
+"Assets/Scripts/Enemy Script.cs"
 "Assets/Scripts/Goal Script.cs"
 "Assets/Scripts/HUDScript.cs"
 "Assets/Scripts/MainMenuScript.cs"
 "Assets/Scripts/Pause manager.cs"
+"Assets/Scripts/Projectile Script.cs"
 "Assets/Scripts/VariableStorage.cs"
 "Assets/Scripts/Victory Script.cs"
 -langversion:9.0

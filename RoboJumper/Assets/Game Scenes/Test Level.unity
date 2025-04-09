@@ -206,10 +206,10 @@ RectTransform:
   m_Children:
   - {fileID: 773195622}
   - {fileID: 36396525}
+  - {fileID: 662052235}
   - {fileID: 1497062481}
   - {fileID: 1846920735}
   - {fileID: 1168340453}
-  - {fileID: 662052235}
   m_Father: {fileID: 637416143}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2236,14 +2236,14 @@ RectTransform:
   m_GameObject: {fileID: 662052234}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.9110923, y: 4.155563, z: 4.6065}
+  m_LocalScale: {x: 4.9617634, y: 4.191422, z: 4.6065}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 30628078}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 22, y: 26}
+  m_AnchoredPosition: {x: 20, y: 26}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &662052236
@@ -2266,7 +2266,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 7c41d48fc2c9ca647af4e4cd43f785ce, type: 3}
+  m_Texture: {fileID: 2800000, guid: 937a3fbed0bb0ba4cb2e91b1af42c6be, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -5692,7 +5692,7 @@ Transform:
   m_GameObject: {fileID: 1493463087}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -554.38, y: -311.47, z: -3.9736814}
+  m_LocalPosition: {x: -554.38, y: -310.85, z: -3.9736814}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6684,7 +6684,7 @@ RectTransform:
   m_GameObject: {fileID: 1754081180}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.4892173, y: 1.7733939, z: 4.6064997}
+  m_LocalScale: {x: 4.5365615, y: 1.8611282, z: 4.6064997}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 484497665}
@@ -6714,7 +6714,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 7c41d48fc2c9ca647af4e4cd43f785ce, type: 3}
+  m_Texture: {fileID: 2800000, guid: 937a3fbed0bb0ba4cb2e91b1af42c6be, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
