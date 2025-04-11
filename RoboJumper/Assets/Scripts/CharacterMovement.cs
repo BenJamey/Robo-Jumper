@@ -33,17 +33,22 @@ public class CharacterMovement : MonoBehaviour
     InputAction jump;
     [SerializeField] float JumpForce;
     [SerializeField] LayerMask GroundLayer;
-    public Vector3 Velocity;
-    public bool JumpPressed = false;
-    public bool CurrentlyGrounded = false;
+    [HideInInspector] public Vector3 Velocity;
+    [HideInInspector] public bool JumpPressed = false;
+    [HideInInspector] public bool CurrentlyGrounded = false;
     private bool isGrounded;
 
     //Variables used for getting the bonus points
     public static float ScoreBonus;
     public static float BonusMultiplier = 1.0f;
     int ConsectiveActions = 0;
-    public static bool RunBonus = false;
+    [HideInInspector] public static bool RunBonus = false;
     float BonusTimer = 0;
+
+    //Audio Variables
+    AudioSource RobotAudio;
+    [SerializeField] AudioClip SuccessSound;
+    [SerializeField] AudioClip DamageSound;
 
     private void Awake()
     {
@@ -71,6 +76,7 @@ public class CharacterMovement : MonoBehaviour
     {
         CharacterController = GetComponent<CharacterController>();
         PlayerCamera = FindFirstObjectByType<CameraMovement>().transform;
+        RobotAudio = GetComponent<AudioSource>();
         Time.timeScale = 1;
         isDead = false;
         VariableStorage.CurrentLevel = SceneManager.GetActiveScene().buildIndex;
@@ -168,6 +174,7 @@ public class CharacterMovement : MonoBehaviour
         //When a user collects a coin
         if (other.gameObject.tag == "Coin")
         {
+            RobotAudio.PlayOneShot(SuccessSound);
             VariableStorage.CoinsCollected++;
             VariableStorage.Points += 10;
             Destroy(other.gameObject);
@@ -182,6 +189,7 @@ public class CharacterMovement : MonoBehaviour
                 ConsectiveActions = 0;
                 RunBonus = false;
             }
+            RobotAudio.PlayOneShot(DamageSound);
         }
 
         if (other.gameObject.tag == "Pitt") {
@@ -198,6 +206,7 @@ public class CharacterMovement : MonoBehaviour
                 BonusTimer = 0;
                 AddBonus();
             }
+            RobotAudio.PlayOneShot(SuccessSound);
             LevelComplete = true;
         }
     }

@@ -13,6 +13,10 @@ public class Pausemanager : MonoBehaviour
 
     [SerializeField] private GameObject PauseUI;
     [SerializeField] private GameObject GameOver;
+    [SerializeField] private GameObject MainMenu;
+    [SerializeField] private GameObject OptionsMenu;
+    [SerializeField] GameObject MuteOption;
+    [SerializeField] GameObject UnmuteOptions;
     [SerializeField] private bool isPaused;
 
     void Awake() {
@@ -42,6 +46,7 @@ public class Pausemanager : MonoBehaviour
         }
     }
 
+    //Used to pause and unpaus the gamew
     void Pause(InputAction.CallbackContext context) {
         isPaused = !isPaused;
 
@@ -52,15 +57,16 @@ public class Pausemanager : MonoBehaviour
         }
     }
 
-    void ActivateMenu() {
+    public void ActivateMenu() {
         Time.timeScale = 0;
         PauseUI.SetActive(true);
+        MainMenu.SetActive(true);
+        OptionsMenu.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
-    public void DeactivateMenu()
-    {
+    public void DeactivateMenu() {
         Time.timeScale = 1;
         PauseUI.SetActive(false);
         isPaused = false;
@@ -77,8 +83,23 @@ public class Pausemanager : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void Retry()
-    {
+    //Loads the pause menus options
+    public void loadOptions() {
+        MainMenu.SetActive(false);
+        OptionsMenu.SetActive(true);
+        if (AudioListener.volume == 0) {
+            MuteOption.SetActive(false);
+            UnmuteOptions.SetActive(true);
+        }
+
+        else {
+            MuteOption.SetActive(true);
+            UnmuteOptions.SetActive(false);
+        }
+    }
+
+    //Lets the user rety the game
+    public void Retry() {
         VariableStorage.CoinsCollected = 0;
         VariableStorage.Points = 0;
         VariableStorage.Hitpoints = 3;
@@ -86,11 +107,26 @@ public class Pausemanager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    //Takers the user back to the main menu
     public void ExitGame() {
         VariableStorage.CoinsCollected = 0;
         VariableStorage.Points = 0;
         VariableStorage.Hitpoints = 3;
         CharacterMovement.BonusMultiplier = 1;
         SceneManager.LoadScene("Main Menu");
+    }
+
+    //Mutes the games audio
+    public void MuteAudio() {
+        AudioListener.volume = 0;
+        MuteOption.SetActive(false);
+        UnmuteOptions.SetActive(true);
+
+    }
+    //UnMutes the games audio
+    public void unMute() {
+        AudioListener.volume = 1;
+        MuteOption.SetActive(true);
+        UnmuteOptions.SetActive(false);
     }
 }

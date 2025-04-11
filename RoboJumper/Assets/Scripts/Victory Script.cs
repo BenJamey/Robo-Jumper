@@ -17,6 +17,9 @@ public class VictoryScript : MonoBehaviour
     [SerializeField] GameObject Gold;
     [SerializeField] GameObject Silver;
     [SerializeField] GameObject Bronze;
+    [SerializeField] GameObject QuitOptions;
+    [SerializeField] GameObject RankingStorage;
+    [SerializeField] GameObject NormalCongrates;
     int FinalScore = 0;
     int LivesBonusPoints = 0;
     int CoinBonusPoints = 0;
@@ -26,6 +29,7 @@ public class VictoryScript : MonoBehaviour
         Gold.SetActive(false);
         Silver.SetActive(false);
         Bronze.SetActive(false);
+        QuitOptions.SetActive(false);
         CharacterMovement.LevelComplete = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -43,7 +47,14 @@ public class VictoryScript : MonoBehaviour
         LivesBonus.text = LivesBonusPoints.ToString("0000");
         FinalScore = VariableStorage.Points + CoinBonusPoints + LivesBonusPoints;
         TotalScore.text = FinalScore.ToString("000000000");
-        StartCoroutine(ShowRank());
+        if (VariableStorage.ShowRank) {
+            RankingStorage.SetActive(true);
+            StartCoroutine(ShowRank());
+        }
+        else if (!VariableStorage.ShowRank) {
+            NormalCongrates.SetActive(true);
+            QuitOptions.SetActive(true);
+        }
     }
     IEnumerator ShowRank() {
         yield return new WaitForSeconds(2);
@@ -56,6 +67,8 @@ public class VictoryScript : MonoBehaviour
         else if (FinalScore >= 5000) {
             Gold.SetActive(true);
         }
+
+        QuitOptions.SetActive(true);
     }
 
     public void ReloadLevel() {
@@ -71,6 +84,6 @@ public class VictoryScript : MonoBehaviour
         VariableStorage.Points = 0;
         VariableStorage.Hitpoints = 3;
         CharacterMovement.BonusMultiplier = 1;
-        SceneManager.LoadScene(VariableStorage.CurrentLevel);
+        SceneManager.LoadScene("Main Menu");
     }
 }

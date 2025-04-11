@@ -13,4 +13,7 @@ public class VariableStorage : MonoBehaviour
     //VariableStorage.Points
     public static int CurrentLevel; //Will be used in future for loading the levels
     //VariableStorage.CurrentLevel
+    public static bool ShowRank = true; //Used tod etermine weather or not a rank is shown at the end of the stage
+    //VariableStorage.ShowRank
+    //public static bool isMuted = false;
 }
